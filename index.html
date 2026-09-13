@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A collective Dhikr and Darood campaign dedicated to Imran Khan, with prayers for relief, ease, protection, and well-being during imprisonment." />
+  <meta name="theme-color" content="#14532d" />
+  <meta property="og:title" content="Collective Prayer Dashboard — Dedicated to Imran Khan" />
+  <meta property="og:description" content="Join in Dhikr and Darood dedicated to Imran Khan, with prayers for relief, ease, protection, and well-being." />
+  <meta property="og:type" content="website" />
+  <title>Collective Prayer Dashboard — Dedicated to Imran Khan</title>
+
+  <style>
+    :root {
+      --primary: #14532d;
+      --primary-2: #166534;
+      --accent: #22c55e;
+      --soft: #ecfdf3;
+      --text: #17221b;
+      --muted: #66756b;
+      --border: #dfe8e1;
+      --white: #ffffff;
+      --warning: #9a6700;
+      --shadow: 0 12px 35px rgba(20, 83, 45, 0.08);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(34, 197, 94, 0.08), transparent 32%),
+        linear-gradient(180deg, #f8fcf9 0%, #f2f7f3 100%);
+      line-height: 1.5;
+    }
+
+    button { font: inherit; }
+
+    .page-shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 44px 0 28px;
+    }
+
+    .hero {
+      max-width: 790px;
+      margin: 0 auto 28px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 14px;
+      padding: 7px 12px;
+      border: 1px solid #cce8d2;
+      border-radius: 999px;
+      background: rgba(255,255,255,.82);
+      color: var(--primary-2);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      color: var(--primary);
+      font-size: clamp(2rem, 5vw, 3.55rem);
+      line-height: 1.08;
+      letter-spacing: -.04em;
+      margin-bottom: 14px;
+    }
+
+    .hero p {
+      max-width: 710px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: clamp(.98rem, 2vw, 1.08rem);
+    }
+
+    .dedication {
+      max-width: 900px;
+      margin: 0 auto 24px;
+      padding: 17px 20px;
+      border: 1px solid #d7eadb;
+      border-radius: 16px;
+      background: rgba(255,255,255,.84);
+      color: #52665a;
+      text-align: center;
+      font-size: .91rem;
+    }
+
+    .dedication strong { color: var(--primary); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.95);
+      box-shadow: var(--shadow);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+    }
+
+    .card-header { margin-bottom: 22px; text-align: center; }
+    .card-header h2 { margin-bottom: 12px; font-size: 1.15rem; }
+
+    .arabic {
+      margin: 14px 0 12px;
+      color: var(--primary);
+      font-family: "Noto Naskh Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+      font-size: clamp(1.72rem, 4.2vw, 2.25rem);
+      font-weight: 700;
+      line-height: 1.8;
+      direction: rtl;
+    }
+
+    .translation {
+      min-height: 48px;
+      color: var(--muted);
+      font-size: .9rem;
+      font-style: italic;
+    }
+
+    .counter-panel {
+      margin-top: 24px;
+      padding: 22px;
+      border: 1px solid #d9ebdd;
+      border-radius: 18px;
+      background: linear-gradient(180deg, var(--soft), #f8fdf9);
+      text-align: center;
+    }
+
+    .counter-label {
+      color: var(--primary-2);
+      font-size: .73rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .count-display {
+      margin: 4px 0;
+      color: var(--primary);
+      font-size: clamp(3rem, 8vw, 4.3rem);
+      font-weight: 900;
+      letter-spacing: -.06em;
+      line-height: 1.05;
+    }
+
+    .status {
+      min-height: 22px;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: .79rem;
+    }
+
+    .status.error { color: var(--warning); }
+
+    .tap-btn {
+      width: 100%;
+      margin-top: 18px;
+      padding: 16px 20px;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: var(--white);
+      box-shadow: 0 10px 22px rgba(20, 83, 45, .18);
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 850;
+      letter-spacing: .03em;
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .tap-btn:hover { filter: brightness(1.05); }
+    .tap-btn:active { transform: translateY(1px) scale(.985); }
+    .tap-btn:disabled { cursor: wait; opacity: .68; }
+
+    .privacy {
+      max-width: 800px;
+      margin: 24px auto 0;
+      color: #7b877f;
+      text-align: center;
+      font-size: .76rem;
+    }
+
+    .footer {
+      max-width: 780px;
+      margin: 30px auto 0;
+      padding: 20px 10px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: #77857b;
+      font-size: .82rem;
+    }
+
+    .pulse { animation: pulse .18s ease-out; }
+    @keyframes pulse { 50% { transform: scale(1.05); } }
+
+    @media (max-width: 760px) {
+      .page-shell { width: min(100% - 20px, 560px); padding-top: 28px; }
+      .grid { grid-template-columns: 1fr; }
+      .card { padding: 22px 18px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page-shell">
+    <header class="hero">
+      <div class="eyebrow">Remembrance • Prayer • Hope</div>
+      <h1>Collective Prayer Dashboard</h1>
+      <p>
+        A shared Dhikr and Darood counter dedicated to Imran Khan, with sincere prayers
+        to Allah for relief, ease, protection, and well-being during imprisonment.
+      </p>
+    </header>
+
+    <div class="dedication" role="note">
+      <strong>Dedicated to Imran Khan.</strong>
+      Every successful tap is permanently added to the shared campaign record.
+      There is no visitor reset button, and totals only increase.
+    </div>
+
+    <section class="grid" aria-label="Prayer counters">
+      <article class="card">
+        <div class="card-header">
+          <h2>Tasbih of Protection &amp; Relief</h2>
+          <div class="arabic" lang="ar" dir="rtl">حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ</div>
+          <p class="translation">
+            “Sufficient for us is Allah, and He is the best Disposer of affairs.”
+          </p>
+        </div>
+
+        <div class="counter-panel">
+          <div class="counter-label">Global Recorded Recitations</div>
+          <div class="count-display" id="tasbihTotal" aria-live="polite">—</div>
+          <div class="status" id="tasbihStatus">Loading shared total…</div>
+        </div>
+
+        <button class="tap-btn" type="button" data-counter="tasbih">
+          TAP TO RECITE
+        </button>
+      </article>
+
+      <article class="card">
+        <div class="card-header">
+          <h2>Darood Shareef (Salawat)</h2>
+          <div class="arabic" lang="ar" dir="rtl">
+            اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ
+          </div>
+          <p class="translation">
+            “O Allah, send blessings upon Muhammad and upon the family of Muhammad.”
+          </p>
+        </div>
+
+        <div class="counter-panel">
+          <div class="counter-label">Global Recorded Recitations</div>
+          <div class="count-display" id="daroodTotal" aria-live="polite">—</div>
+          <div class="status" id="daroodStatus">Loading shared total…</div>
+        </div>
+
+        <button class="tap-btn" type="button" data-counter="darood">
+          TAP TO RECITE
+        </button>
+      </article>
+    </section>
+
+    <p class="privacy">
+      To estimate weekly participation, this site stores a random anonymous browser identifier
+      with each recitation. It does not ask visitors for their name or email address.
+    </p>
+
+    <footer class="footer">
+      <blockquote>
+        “The supplication of a Muslim for his brother in his absence will certainly be answered.”
+      </blockquote>
+      <div>— Sahih Muslim</div>
+      <small>May Allah accept every sincere prayer and remembrance.</small>
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (() => {
+      "use strict";
+
+      /*
+       * REQUIRED:
+       * 1. Create a Supabase project.
+       * 2. Run database.sql from this repository in Supabase SQL Editor.
+       * 3. Replace the two values below using Project Settings / Connect.
+       *
+       * The publishable key is designed to be used in browser code.
+       * NEVER put your Supabase secret key here.
+       */
+      const SUPABASE_URL = "https://vnmnvsjmwywxdhvbzapd.supabase.co";
+      const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_wKrwoBYgquxJK6F0O_jKNA_wMVITOv0";
+
+      const configured =
+        !SUPABASE_URL.includes("PASTE_YOUR") &&
+        !SUPABASE_PUBLISHABLE_KEY.includes("PASTE_YOUR");
+
+      const db = configured
+        ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)
+        : null;
+
+      const TYPES = ["tasbih", "darood"];
+      const VISITOR_KEY = "prayerCampaignAnonymousVisitorId";
+
+      const formatNumber = (value) =>
+        new Intl.NumberFormat(undefined).format(Number(value) || 0);
+
+      const getVisitorId = () => {
+        let id = localStorage.getItem(VISITOR_KEY);
+
+        if (!id) {
+          id = crypto.randomUUID
+            ? crypto.randomUUID()
+            : `${Date.now()}-${Math.random().toString(16).slice(2)}-${Math.random().toString(16).slice(2)}`;
+          localStorage.setItem(VISITOR_KEY, id);
+        }
+
+        return id;
+      };
+
+      const setStatus = (type, message, isError = false) => {
+        const el = document.getElementById(`${type}Status`);
+        el.textContent = message;
+        el.classList.toggle("error", isError);
+      };
+
+      const setTotal = (type, total) => {
+        const el = document.getElementById(`${type}Total`);
+        el.textContent = formatNumber(total);
+        el.classList.remove("pulse");
+        void el.offsetWidth;
+        el.classList.add("pulse");
+      };
+
+      async function loadTotals() {
+        if (!configured) {
+          TYPES.forEach((type) => {
+            document.getElementById(`${type}Total`).textContent = "—";
+            setStatus(type, "Connect Supabase to activate the permanent counter.", true);
+          });
+          return;
+        }
+
+        const { data, error } = await db
+          .from("public_counter_totals")
+          .select("counter_type,total");
+
+        if (error) {
+          console.error(error);
+          TYPES.forEach((type) =>
+            setStatus(type, "Could not load the shared total. Please refresh.", true)
+          );
+          return;
+        }
+
+        TYPES.forEach((type) => {
+          const row = data.find((item) => item.counter_type === type);
+          setTotal(type, row?.total ?? 0);
+          setStatus(type, "Permanent shared record");
+        });
+      }
+
+      async function recordRecitation(type, button) {
+        if (!TYPES.includes(type) || !configured) {
+          setStatus(type, "The database is not connected yet.", true);
+          return;
+        }
+
+        button.disabled = true;
+        const originalText = button.textContent;
+        button.textContent = "RECORDING…";
+        setStatus(type, "Saving your recitation…");
+
+        try {
+          const { data, error } = await db.rpc("record_recitation", {
+            p_counter_type: type,
+            p_visitor_id: getVisitorId()
+          });
+
+          if (error) throw error;
+
+          setTotal(type, data);
+          setStatus(type, "Recorded permanently ✓");
+
+          if ("vibrate" in navigator) navigator.vibrate(20);
+        } catch (error) {
+          console.error(error);
+          setStatus(type, "Not recorded — please tap again.", true);
+        } finally {
+          button.disabled = false;
+          button.textContent = originalText;
+        }
+      }
+
+      document.querySelectorAll("[data-counter]").forEach((button) => {
+        button.addEventListener("click", () => {
+          recordRecitation(button.dataset.counter, button);
+        });
+      });
+
+      loadTotals();
+
+      // Refresh shared totals periodically so visitors see recent activity.
+      if (configured) {
+        setInterval(loadTotals, 30000);
+      }
+    })();
+  </script>
+</body>
+</html>
