@@ -502,5 +502,73 @@
       }
     })();
   </script>
+  <!-- SHARE BUTTON FUNCTIONS -->
+<script>
+  const campaignURL = "https://ybkiani.github.io/duaforimrankhan/";
+
+  const campaignText =
+    "🤲 Join the Collective Dua for Imran Khan\n\n" +
+    "A peaceful initiative bringing people together in prayer, remembrance and hope. " +
+    "Offer Tasbih, Darood Shareef and sincere dua for his protection, health, relief, " +
+    "justice, strength and ease.\n\n" +
+    "Every prayer matters. Join and share with others. 🤲";
+
+  /* WhatsApp */
+  document.getElementById("share-whatsapp").href =
+    "https://wa.me/?text=" +
+    encodeURIComponent(campaignText + "\n\n" + campaignURL);
+
+  /* X / Twitter */
+  document.getElementById("share-x").href =
+    "https://twitter.com/intent/tweet?text=" +
+    encodeURIComponent(campaignText + "\n\n" + campaignURL);
+
+  /* Facebook */
+  document.getElementById("share-facebook").href =
+    "https://www.facebook.com/sharer/sharer.php?u=" +
+    encodeURIComponent(campaignURL);
+
+  /* Telegram */
+  document.getElementById("share-telegram").href =
+    "https://t.me/share/url?url=" +
+    encodeURIComponent(campaignURL) +
+    "&text=" +
+    encodeURIComponent(campaignText);
+
+  /* More Apps / Native Share */
+  async function shareCampaign() {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Collective Dua for Imran Khan",
+          text: campaignText,
+          url: campaignURL
+        });
+      } catch (error) {
+        console.log("Sharing cancelled.");
+      }
+    } else {
+      copyCampaignLink();
+    }
+  }
+
+  /* Copy Link */
+  async function copyCampaignLink(button) {
+    try {
+      await navigator.clipboard.writeText(campaignURL);
+
+      if (button) {
+        const originalText = button.innerHTML;
+        button.innerHTML = "✓ Link Copied";
+
+        setTimeout(() => {
+          button.innerHTML = originalText;
+        }, 2000);
+      }
+    } catch (error) {
+      window.prompt("Copy this link:", campaignURL);
+    }
+  }
+</script>
 </body>
 </html>
