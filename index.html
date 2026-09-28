@@ -229,6 +229,154 @@
         transition-duration: .01ms !important;
       }
     }
+    /* =========================================
+   COLLECTIVE DUA PHOTO PROGRESS
+========================================= */
+
+.dua-photo-section {
+  width: 100%;
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 22px;
+  text-align: center;
+  background: rgba(255,255,255,.95);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.dua-photo-section h2 {
+  margin-bottom: 7px;
+  color: var(--primary);
+  font-size: 1.35rem;
+}
+
+.dua-photo-intro {
+  margin-bottom: 18px;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+
+/* PHOTO CONTAINER */
+
+.dua-photo-frame {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 4 / 5;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #ddd;
+  box-shadow: 0 8px 25px rgba(0,0,0,.16);
+}
+
+
+/* BOTH COPIES OF THE SAME PHOTO */
+
+.dua-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
+/* BOTTOM IMAGE = BLACK AND WHITE */
+
+.dua-photo-bw {
+  filter: grayscale(100%);
+}
+
+
+/* TOP IMAGE = FULL COLOUR */
+
+.dua-photo-color {
+  filter: grayscale(0%);
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path .5s ease;
+}
+
+
+/* 45 / 100 ETC. */
+
+.dua-photo-count {
+  margin-top: 15px;
+  color: var(--primary);
+  font-size: 1.55rem;
+  font-weight: 900;
+}
+
+
+/* PROGRESS BAR */
+
+.dua-progress-bar {
+  width: 100%;
+  height: 12px;
+  margin: 10px auto;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #e4e9e5;
+}
+
+.dua-progress-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: 20px;
+  background: linear-gradient(
+    90deg,
+    var(--primary),
+    var(--accent)
+  );
+  transition: width .5s ease;
+}
+
+
+/* MESSAGE */
+
+.dua-photo-message {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: .82rem;
+}
+
+
+/* SMALL ANIMATION WHEN 100 IS REACHED */
+
+.dua-photo-frame.dua-complete {
+  animation: duaComplete .8s ease;
+}
+
+@keyframes duaComplete {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.025);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+  .dua-photo-section {
+    width: 100%;
+    padding: 18px;
+  }
+
+  .dua-photo-frame {
+    max-width: 100%;
+  }
+}
   </style>
 </head>
 
@@ -249,7 +397,59 @@
       A peaceful initiative bringing people together in prayer, remembrance and hope. 
       Offer Tasbih, Darood Shareef and sincere dua for his protection, health, relief, justice, strength and ease.
     </div>
+    
+    <!-- =========================================
+         NEW PHOTO PROGRESS
+    ========================================== -->
 
+    <section class="dua-photo-section">
+
+      <h2>Collective Dua Progress</h2>
+
+      <p class="dua-photo-intro">
+        Each recitation brings the image closer to full colour.
+      </p>
+
+      <div class="dua-photo-frame" id="duaPhotoFrame">
+
+        <!-- Black & white base image -->
+        <img
+          src="images/dua-photo.jpg"
+          class="dua-photo dua-photo-bw"
+          alt="Collective Dua"
+        >
+
+        <!-- Colour image placed on top -->
+        <img
+          src="images/dua-photo.jpg"
+          class="dua-photo dua-photo-color"
+          id="duaColorPhoto"
+          alt=""
+          aria-hidden="true"
+        >
+
+      </div>
+
+      <div class="dua-photo-count">
+        <span id="duaProgressNumber">0 / 100</span>
+      </div>
+
+      <div class="dua-progress-bar">
+        <div
+          class="dua-progress-fill"
+          id="duaProgressFill">
+        </div>
+      </div>
+
+      <p class="dua-photo-message" id="duaPhotoMessage">
+        Each recitation reveals more colour.
+      </p>
+
+    </section>
+
+
+    <!-- YOUR EXISTING COUNTERS CONTINUE BELOW -->
+   
     <section class="grid" aria-label="Prayer counters">
       <article class="card">
         <div class="card-header">
@@ -397,6 +597,121 @@
 
       const TYPES = ["tasbih", "darood"];
       const VISITOR_KEY = "prayerCampaignAnonymousVisitorId";
+            /* =========================================
+         PHOTO PROGRESS
+         DISPLAY ONLY — DOES NOT WRITE TO SUPABASE
+      ========================================== */
+
+      const currentTotals = {
+        tasbih: 0,
+        darood: 0
+      };
+
+
+      function updateDuaPhoto() {
+
+        const colorPhoto =
+          document.getElementById("duaColorPhoto");
+
+        const progressNumber =
+          document.getElementById("duaProgressNumber");
+
+        const progressFill =
+          document.getElementById("duaProgressFill");
+
+        const message =
+          document.getElementById("duaPhotoMessage");
+
+        const frame =
+          document.getElementById("duaPhotoFrame");
+
+
+        if (
+          !colorPhoto ||
+          !progressNumber ||
+          !progressFill ||
+          !message ||
+          !frame
+        ) {
+          return;
+        }
+
+
+        /* Combine the two PERMANENT totals */
+
+        const combinedTotal =
+          Number(currentTotals.tasbih || 0) +
+          Number(currentTotals.darood || 0);
+
+
+        /*
+          VISUAL CYCLE ONLY
+
+          1   = 1 / 100
+          50  = 50 / 100
+          100 = 100 / 100
+
+          101 = 1 / 100
+          150 = 50 / 100
+          200 = 100 / 100
+
+          Supabase NEVER resets.
+        */
+
+        let progress = 0;
+
+        if (combinedTotal > 0) {
+          progress =
+            ((combinedTotal - 1) % 100) + 1;
+        }
+
+
+        const hiddenPercentage =
+          100 - progress;
+
+
+        /* Reveal colour */
+
+        colorPhoto.style.clipPath =
+          `inset(${hiddenPercentage}% 0 0 0)`;
+
+
+        /* Update progress bar */
+
+        progressFill.style.width =
+          `${progress}%`;
+
+
+        /* Update number */
+
+        progressNumber.textContent =
+          `${progress} / 100`;
+
+
+        /* 100 completed */
+
+        if (
+          progress === 100 &&
+          combinedTotal > 0
+        ) {
+
+          message.textContent =
+            "Alhamdulillah — 100 recitations completed. 🤲";
+
+          frame.classList.remove("dua-complete");
+
+          void frame.offsetWidth;
+
+          frame.classList.add("dua-complete");
+
+        } else {
+
+          message.textContent =
+            "Each recitation reveals more colour.";
+
+          frame.classList.remove("dua-complete");
+        }
+      }
 
       const formatNumber = (value) =>
         new Intl.NumberFormat(undefined).format(Number(value) || 0);
@@ -420,12 +735,30 @@
         el.classList.toggle("error", isError);
       };
 
-      const setTotal = (type, total) => {
-        const el = document.getElementById(`${type}Total`);
-        el.textContent = formatNumber(total);
+           const setTotal = (type, total) => {
+
+        const el =
+          document.getElementById(`${type}Total`);
+
+        el.textContent =
+          formatNumber(total);
+
         el.classList.remove("pulse");
+
         void el.offsetWidth;
+
         el.classList.add("pulse");
+
+
+        /* NEW:
+           Give the existing total to the photo.
+           This DOES NOT change Supabase.
+        */
+
+        currentTotals[type] =
+          Number(total) || 0;
+
+        updateDuaPhoto();
       };
 
       async function loadTotals() {
