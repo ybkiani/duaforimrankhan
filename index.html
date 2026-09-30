@@ -376,6 +376,54 @@
   .dua-photo-frame {
     max-width: 100%;
   }
+/* WHO IS IMRAN KHAN LINK */
+
+.imran-page-link {
+  margin-top: 14px;
+  text-align: center;
+}
+
+.imran-page-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 8px 16px;
+
+  color: var(--primary);
+  background: var(--soft);
+
+  border: 1px solid #cce8d2;
+  border-radius: 999px;
+
+  text-decoration: none;
+  font-size: .78rem;
+  font-weight: 850;
+  letter-spacing: .04em;
+
+  transition:
+    background .2s ease,
+    color .2s ease,
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+.imran-page-link a span {
+  transition: transform .2s ease;
+}
+
+.imran-page-link a:hover {
+  color: #fff;
+  background: var(--primary);
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 6px 16px rgba(20,83,45,.16);
+}
+
+.imran-page-link a:hover span {
+  transform: translateX(4px);
 }
   </style>
 </head>
@@ -441,14 +489,25 @@
         </div>
       </div>
 
-      <p class="dua-photo-message" id="duaPhotoMessage">
-        Each recitation reveals more colour.
-      </p>
+     <p class="dua-photo-message" id="duaPhotoMessage">
+  Each recitation reveals more colour.
+</p>
 
-    </section>
+<!-- WHO IS IMRAN KHAN LINK -->
 
+<div class="imran-page-link">
+  <a
+    href="https://ybkiani.github.io/ImranKhan/"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    WHO IS IMRAN KHAN? <span>→</span>
+  </a>
+</div>
 
-    <!-- YOUR EXISTING COUNTERS CONTINUE BELOW -->
+</section>
+
+<!-- YOUR EXISTING COUNTERS CONTINUE BELOW -->
    
     <section class="grid" aria-label="Prayer counters">
       <article class="card">
